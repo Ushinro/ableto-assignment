@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\QuestionOption;
 
 class HomeController extends Controller
 {
@@ -17,7 +18,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the questionnaire.
      *
      * @return \Illuminate\Http\Response
      */
@@ -25,6 +26,12 @@ class HomeController extends Controller
     {
         $questions = Question::all();
 
-        return view('home', compact('questions'));
+        $unsortedQuestionOptions = QuestionOption::all();
+        $questionOptions = [];
+        foreach ($unsortedQuestionOptions as $questionOption) {
+            $questionOptions[$questionOption->question_id][] = $questionOption;
+        }
+
+        return view('home', compact('questions', 'questionOptions'));
     }
 }
