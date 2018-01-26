@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Question;
 use App\QuestionOption;
+use App\UserAnswer;
 
 class HomeController extends Controller
 {
@@ -33,5 +34,36 @@ class HomeController extends Controller
         }
 
         return view('home', compact('questions', 'questionOptions'));
+    }
+
+    /**
+     * Show a list of the questions and answers the user answered today.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function reviewToday()
+    {
+        $userAnswers = UserAnswer::today();
+
+        return view('review', compact('userAnswers'));
+    }
+
+    /**
+     * Save the answers to the logged-in user's survey.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function saveSurvey()
+    {
+        $questionIds = Question::select('id')->get();
+
+        foreach ($questionIds as $questionId) {
+            $userAnswer = new UserAnswer();
+            $userAnswer->user_id = \Auth::user()->id;
+            $userAnswer->question_option_id = request('q' . $questionId->id);
+            $userAnswer->save();
+        }
+
+        return redirect('/review');
     }
 }

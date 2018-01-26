@@ -14,34 +14,40 @@
                         </div>
                     @endif
 
-                    <form action="/answers">
-                        @foreach ($questions as $question)
-                            @php
-                                $questionOptionList = $questionOptions[$question->id];
-                            @endphp
+                    @if (count($questions) > 0)
+                        <form method="POST" action="/answers">
+                            {{ csrf_field() }}
 
-                            <div class="question-section">
-                                {{ $loop->index + 1 }}. <label for="question_{{ $loop->index }}">{{ $question->label }}</label>
+                            @foreach ($questions as $question)
+                                @php
+                                    $questionOptionList = $questionOptions[$question->id];
+                                @endphp
 
-                                @foreach ($questionOptionList as $questionOption)
-                                    <div class="question-options-section">
-                                        <input type="{{ $question->type }}"
-                                               id="q_{{ $question->id }}_c_{{ $questionOption->id }}"
-                                               name="q{{ $question->id }}"
-                                               value="{{ $questionOption->id }}">
+                                <div class="question-group">
+                                    {{ $loop->index + 1 }}. <label for="question_{{ $loop->index }}">{{ $question->label }}</label>
 
-                                        <label for="q_{{ $question->id }}_c_{{ $questionOption->id }}">
-                                            {{ $questionOption->label }}
-                                        </label>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endforeach
+                                    @foreach ($questionOptionList as $questionOption)
+                                        <div class="question-option-group">
+                                            <input type="{{ $question->type }}"
+                                                   id="q_{{ $question->id }}_c_{{ $questionOption->id }}"
+                                                   name="q{{ $question->id }}"
+                                                   value="{{ $questionOption->id }}">
 
-                            <button type="submit" class="btn btn-primary">
-                                Submit
-                            </button>
-                    </form>
+                                            <label for="q_{{ $question->id }}_c_{{ $questionOption->id }}">
+                                                {{ $questionOption->label }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
+
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                        </form>
+                    @else
+                        <div>There are no questions to display.</div>
+                    @endif
                 </div>
             </div>
         </div>

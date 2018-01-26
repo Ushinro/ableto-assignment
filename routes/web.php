@@ -13,5 +13,7 @@
 
 Route::get('/','HomeController@index')->name('home');
 Route::get('login', 'Users@login');
+Route::get('review', 'HomeController@reviewToday')->name('reviewToday');
+Route::post('answers', 'HomeController@saveSurvey');
 
 Auth::routes();
