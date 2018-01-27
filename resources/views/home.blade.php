@@ -30,7 +30,7 @@
                                         <div class="question-option-group">
                                             <input type="{{ $question->type }}"
                                                    id="q_{{ $question->id }}_c_{{ $questionOption->id }}"
-                                                   name="q{{ $question->id }}"
+                                                   name="q{{ $question->id }}{{ $question->type == 'checkbox' ? '[]' : '' }}"
                                                    value="{{ $questionOption->id }}">
 
                                             <label for="q_{{ $question->id }}_c_{{ $questionOption->id }}">
@@ -41,9 +41,9 @@
                                 </div>
                             @endforeach
 
-                                <button type="submit" class="btn btn-primary">
-                                    Submit
-                                </button>
+                            <button type="submit" class="btn btn-primary">
+                                Submit
+                            </button>
                         </form>
                     @else
                         <div>There are no questions to display.</div>

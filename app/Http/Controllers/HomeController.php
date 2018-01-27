@@ -43,7 +43,11 @@ class HomeController extends Controller
      */
     public function reviewToday()
     {
-        $userAnswers = UserAnswer::today();
+        $unfilteredUserAnswers = UserAnswer::today();
+        $userAnswers = [];
+        foreach ($unfilteredUserAnswers as $userAnswer) {
+            $userAnswers[$userAnswer->question_id][] = $userAnswer;
+        }
 
         return view('review', compact('userAnswers'));
     }
@@ -55,15 +59,25 @@ class HomeController extends Controller
      */
     public function saveSurvey()
     {
-        $questionIds = Question::select('id')->get();
+        $questions = Question::all();
 
-        foreach ($questionIds as $questionId) {
-            $userAnswer = new UserAnswer();
-            $userAnswer->user_id = \Auth::user()->id;
-            $userAnswer->question_option_id = request('q' . $questionId->id);
-            $userAnswer->save();
+        foreach ($questions as $question) {
+            $formAnswer = request('q' . $question->id);
+            if ($question->type == 'checkbox') {
+                foreach ($formAnswer as $answer) {
+                    $userAnswer = new UserAnswer();
+                    $userAnswer->user_id = \Auth::user()->id;
+                    $userAnswer->question_option_id = $answer;
+                    $userAnswer->save();
+                }
+            } else {
+                $userAnswer = new UserAnswer();
+                $userAnswer->user_id = \Auth::user()->id;
+                $userAnswer->question_option_id = $formAnswer;
+                $userAnswer->save();
+            }
         }
 
-        return redirect('/review');
+        return redirect('answers');
     }
 }

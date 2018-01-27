@@ -19,11 +19,20 @@
 
                     <div class="user-answer-section">
                         @if (count($userAnswers) > 0)
-                            Your answers for today were:
-                            @foreach ($userAnswers as $userAnswer)
-                                <div>
-                                    <b>{{ $userAnswer->question }}</b> {{ $userAnswer->answer }}
-                                </div>
+                            <p>Your answers for today were:</p>
+
+                            @foreach ($userAnswers as $question)
+                                <p>
+                                    <div>
+                                        <b>{{ $question[0]->question }}</b>
+                                    </div>
+
+                                    @foreach ($question as $userAnswer)
+                                        <div>
+                                            {{ $userAnswer->answer }}
+                                        </div>
+                                    @endforeach
+                                </p>
                             @endforeach
                         @else
                             You have not answered the survey for today.

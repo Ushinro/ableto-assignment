@@ -16,11 +16,13 @@ class UserAnswer extends Model
     {
         return static::join('question_options', 'question_options.id', '=', 'user_answers.question_option_id')
                      ->join('questions', 'questions.id', '=', 'question_options.question_id')
-                     ->select('question_options.label AS answer', 'questions.label AS question')
-                     ->where([
-                         ['user_answers.user_id', '=', \Auth::user()->id],
-                         ['user_answers.created_at', '>=', Carbon::today()],
-                     ])
+                     ->select(
+                         'questions.id AS question_id',
+                         'questions.label AS question',
+                         'question_options.label AS answer'
+                     )
+                     ->where('user_answers.user_id', '=', \Auth::user()->id)
+                     ->whereDate('user_answers.created_at', '=', Carbon::today())
                      ->get();
     }
 }
