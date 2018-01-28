@@ -17,8 +17,8 @@ class CreateUserAnswersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->integer('question_option_id')->unsigned();
-            $table->foreign('question_option_id')->references('id')->on('question_options');
+            $table->integer('question_choice_id')->unsigned();
+            $table->foreign('question_choice_id')->references('id')->on('question_choices');
             $table->timestamps();
         });
     }

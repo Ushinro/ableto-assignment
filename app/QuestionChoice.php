@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class QuestionOption extends Model
+class QuestionChoice extends Model
 {
     //
 }

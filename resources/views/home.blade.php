@@ -14,37 +14,41 @@
                         </div>
                     @endif
 
-                    @if (count($questions) > 0)
-                        <form method="POST" action="/answers">
-                            {{ csrf_field() }}
+                    @if (count($questionnaires) > 0)
+                        @foreach ($questionnaires as $questionnaire)
+                            <form method="POST" action="/answers">
+                                {{ csrf_field() }}
 
-                            @foreach ($questions as $question)
-                                @php
-                                    $questionOptionList = $questionOptions[$question->id];
-                                @endphp
+                                @foreach ($questions as $question)
+                                    @php
+                                        $questionOptionList = $questionChoices[$questionnaire->id][$question->id];
+                                    @endphp
 
-                                <div class="question-group">
-                                    {{ $loop->index + 1 }}. <label for="question_{{ $loop->index }}">{{ $question->label }}</label>
+                                    <div class="question-group">
+                                        {{ $loop->index + 1 }}. <label for="question_{{ $loop->index }}">{{ $question->label }}</label>
 
-                                    @foreach ($questionOptionList as $questionOption)
-                                        <div class="question-option-group">
-                                            <input type="{{ $question->type }}"
-                                                   id="q_{{ $question->id }}_c_{{ $questionOption->id }}"
-                                                   name="q{{ $question->id }}{{ $question->type == 'checkbox' ? '[]' : '' }}"
-                                                   value="{{ $questionOption->id }}">
+                                        @foreach ($questionOptionList as $questionOption)
+                                            <div class="question-option-group">
+                                                <input type="{{ $question->type }}"
+                                                       id="q_{{ $question->id }}_c_{{ $questionOption->id }}"
+                                                       name="q{{ $question->id }}{{ $question->type == 'checkbox' ? '[]' : '' }}"
+                                                       value="{{ $questionOption->id }}">
 
-                                            <label for="q_{{ $question->id }}_c_{{ $questionOption->id }}">
-                                                {{ $questionOption->label }}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endforeach
+                                                <label for="q_{{ $question->id }}_c_{{ $questionOption->id }}">
+                                                    {{ $questionOption->label }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endforeach
 
-                            <button type="submit" class="btn btn-primary">
-                                Submit
-                            </button>
-                        </form>
+                                <input type="hidden" name="questionnaire" value="{{ $questionnaire->id }}">
+
+                                <button type="submit" class="btn btn-primary">
+                                    Submit
+                                </button>
+                            </form>
+                        @endforeach
                     @else
                         <div>There are no questions to display.</div>
                     @endif

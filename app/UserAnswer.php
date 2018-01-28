@@ -14,12 +14,12 @@ class UserAnswer extends Model
      */
     public static function today()
     {
-        return static::join('question_options', 'question_options.id', '=', 'user_answers.question_option_id')
-                     ->join('questions', 'questions.id', '=', 'question_options.question_id')
+        return static::join('question_choices', 'question_choices.id', '=', 'user_answers.question_choice_id')
+                     ->join('questions', 'questions.id', '=', 'question_choices.question_id')
                      ->select(
                          'questions.id AS question_id',
                          'questions.label AS question',
-                         'question_options.label AS answer'
+                         'question_choices.label AS answer'
                      )
                      ->where('user_answers.user_id', '=', \Auth::user()->id)
                      ->whereDate('user_answers.created_at', '=', Carbon::today())

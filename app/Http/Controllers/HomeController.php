@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Question;
-use App\QuestionOption;
+use App\QuestionChoice;
+use App\Questionnaire;
 use App\UserAnswer;
 
+/**
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
     /**
@@ -21,19 +26,34 @@ class HomeController extends Controller
     /**
      * Show the questionnaire.
      *
+     * TODO: Reduce the number of DB calls from 3 tables:
+     *       questionnaires
+     *       questions
+     *       question_choices.
+     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        $questionnaires = Questionnaire::all();
         $questions = Question::all();
+        $unsortedQuestionChoices = QuestionChoice::all();
 
-        $unsortedQuestionOptions = QuestionOption::all();
-        $questionOptions = [];
-        foreach ($unsortedQuestionOptions as $questionOption) {
-            $questionOptions[$questionOption->question_id][] = $questionOption;
+        $questionChoices = [];
+        foreach ($questionnaires as $questionnaire) {
+            foreach ($unsortedQuestionChoices as $questionChoice) {
+                $questionChoices[$questionnaire->id][$questionChoice->question_id][] = $questionChoice;
+            }
         }
 
-        return view('home', compact('questions', 'questionOptions'));
+        return view(
+            'home',
+            compact(
+                'questionnaires',
+                'questions',
+                'questionChoices'
+            )
+        );
     }
 
     /**
@@ -59,21 +79,23 @@ class HomeController extends Controller
      */
     public function saveSurvey()
     {
-        $questions = Question::all();
+        $questions = Question::where('questionnaire_id', '=', request('questionnaire'))
+                             ->get();
 
         foreach ($questions as $question) {
             $formAnswer = request('q' . $question->id);
+
             if ($question->type == 'checkbox') {
                 foreach ($formAnswer as $answer) {
                     $userAnswer = new UserAnswer();
                     $userAnswer->user_id = \Auth::user()->id;
-                    $userAnswer->question_option_id = $answer;
+                    $userAnswer->question_choice_id = $answer;
                     $userAnswer->save();
                 }
             } else {
                 $userAnswer = new UserAnswer();
                 $userAnswer->user_id = \Auth::user()->id;
-                $userAnswer->question_option_id = $formAnswer;
+                $userAnswer->question_choice_id = $formAnswer;
                 $userAnswer->save();
             }
         }
