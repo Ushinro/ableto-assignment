@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Question;
+use App\Questionnaire;
 use App\UserAnswer;
 
 /**
@@ -43,7 +44,8 @@ class QuestionnaireController extends Controller
      */
     public function save()
     {
-        $questions = Question::where('questionnaire_id', '=', request('questionnaire'))
+        $questionnaire = Questionnaire::find(request('questionnaire'));
+        $questions = Question::where('questionnaire_id', '=', $questionnaire->id)
                              ->get();
 
         $requiredQuestionsToValidate = [];
@@ -73,6 +75,11 @@ class QuestionnaireController extends Controller
                 }
             }
         }
+
+        session()->flash(
+            'status',
+            'Questionnaire "' . $questionnaire->name . '" has been successfully saved'
+        );
 
         return redirect('answers');
     }
