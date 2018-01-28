@@ -35,6 +35,7 @@ class QuestionnairesTableSeeder extends Seeder
             'questionnaire_id' => $questionnaire->id,
             'label' => 'What genres of books do you enjoy reading?',
             'type' => 'checkbox',
+            'required' => false,
         ]);
 
         // Probably not ideal to also insert choices in the same seeder.
@@ -101,11 +102,6 @@ class QuestionnairesTableSeeder extends Seeder
             'question_id' => $question3->id,
             'label' => 'Romance',
             'value' => 'romance',
-        ]);
-        $question3Choice6 = factory(QuestionChoice::class)->create([
-            'question_id' => $question3->id,
-            'label' => 'I do not read books (often)',
-            'value' => 'none',
         ]);
     }
 }

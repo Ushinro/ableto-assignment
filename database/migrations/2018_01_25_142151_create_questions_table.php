@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->string('label');
             $table->string('type')->default('text');
+            $table->boolean('required')->default(true);
             $table->timestamps();
         });
     }

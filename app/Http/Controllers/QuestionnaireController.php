@@ -44,23 +44,33 @@ class QuestionnaireController extends Controller
     public function save()
     {
         $questions = Question::where('questionnaire_id', '=', request('questionnaire'))
-            ->get();
+                             ->get();
+
+        $requiredQuestionsToValidate = [];
+        foreach ($questions as $question) {
+            if ($question->required) {
+                $requiredQuestionsToValidate['q' . $question->id] = 'required';
+            }
+        }
+        $this->validate(request(), $requiredQuestionsToValidate);
 
         foreach ($questions as $question) {
             $formAnswer = request('q' . $question->id);
 
-            if ($question->type == 'checkbox') {
-                foreach ($formAnswer as $answer) {
+            if (!is_null($formAnswer)) {
+                if ($question->type == 'checkbox') {
+                    foreach ($formAnswer as $answer) {
+                        $userAnswer = new UserAnswer();
+                        $userAnswer->user_id = \Auth::user()->id;
+                        $userAnswer->question_choice_id = $answer;
+                        $userAnswer->save();
+                    }
+                } else {
                     $userAnswer = new UserAnswer();
                     $userAnswer->user_id = \Auth::user()->id;
-                    $userAnswer->question_choice_id = $answer;
+                    $userAnswer->question_choice_id = $formAnswer;
                     $userAnswer->save();
                 }
-            } else {
-                $userAnswer = new UserAnswer();
-                $userAnswer->user_id = \Auth::user()->id;
-                $userAnswer->question_choice_id = $formAnswer;
-                $userAnswer->save();
             }
         }
 
