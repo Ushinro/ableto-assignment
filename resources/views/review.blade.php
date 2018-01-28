@@ -13,14 +13,12 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <a href="/">
-                        Return to home page
-                    </a>
 
                     <div class="user-answer-section">
                         @if (count($userAnswers) > 0)
                             <p>Your answers for today were:</p>
 
+                            {{-- The flow of the names is not coherent... --}}
                             @foreach ($userAnswers as $question)
                                 <p>
                                     <div>

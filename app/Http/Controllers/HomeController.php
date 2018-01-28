@@ -35,6 +35,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $userAnswersForToday = UserAnswer::today();
+        if (count($userAnswersForToday) > 0) {
+            // User already answered the survey for today.
+            // Redirect them to the answers review page
+            return redirect('answers');
+        }
+
         $questionnaires = Questionnaire::all();
         $questions = Question::all();
         $unsortedQuestionChoices = QuestionChoice::all();
@@ -54,52 +61,5 @@ class HomeController extends Controller
                 'questionChoices'
             )
         );
-    }
-
-    /**
-     * Show a list of the questions and answers the user answered today.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function reviewToday()
-    {
-        $unfilteredUserAnswers = UserAnswer::today();
-        $userAnswers = [];
-        foreach ($unfilteredUserAnswers as $userAnswer) {
-            $userAnswers[$userAnswer->question_id][] = $userAnswer;
-        }
-
-        return view('review', compact('userAnswers'));
-    }
-
-    /**
-     * Save the answers to the logged-in user's survey.
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public function saveSurvey()
-    {
-        $questions = Question::where('questionnaire_id', '=', request('questionnaire'))
-                             ->get();
-
-        foreach ($questions as $question) {
-            $formAnswer = request('q' . $question->id);
-
-            if ($question->type == 'checkbox') {
-                foreach ($formAnswer as $answer) {
-                    $userAnswer = new UserAnswer();
-                    $userAnswer->user_id = \Auth::user()->id;
-                    $userAnswer->question_choice_id = $answer;
-                    $userAnswer->save();
-                }
-            } else {
-                $userAnswer = new UserAnswer();
-                $userAnswer->user_id = \Auth::user()->id;
-                $userAnswer->question_choice_id = $formAnswer;
-                $userAnswer->save();
-            }
-        }
-
-        return redirect('answers');
     }
 }
