@@ -1,0 +1,69 @@
+body {
+    font-family: "Open Sans", sans-serif;
+}
+
+.btn-link {
+    color: #21a39a;
+    transition: color 0.1s;
+}
+
+.btn-link:hover {
+    color: #f9b14c;
+}
+
+.btn-primary {
+    background-color: #21a39a;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.1s;
+}
+
+.btn-primary:hover {
+    background-color: #ffcc00;
+    color: #fff;
+}
+
+.navbar-ableto {
+    background-color: #21a39a;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 1.35em;
+    font-weight: 600;
+    transition: color 0.1s;
+}
+
+.navbar-brand:hover {
+    color: #ffcc00;
+}
+
+.nav > li > a {
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.1s;
+}
+
+.nav > li > a:hover {
+    background-color: #ffcc00;
+}
+
+.navbar-static-top {
+    border-width: 0;
+}
+
+.question-group {
+    margin: 16px 0;
+}
+
+.question-label {
+    font-weight: bold;
+}
+
+.question-choice-label {
+    cursor: pointer;
+    font-weight: normal;
+}

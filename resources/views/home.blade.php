@@ -8,16 +8,14 @@
                 <div class="panel-heading">AbleTo Questionnaire</div>
 
                 <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    @include('layouts.flash')
 
                     @if (count($questionnaires) > 0)
                         @foreach ($questionnaires as $questionnaire)
                             <form method="POST" action="/answers">
                                 {{ csrf_field() }}
+
+                                <h3>{{ $questionnaire->name }}</h3>
 
                                 @foreach ($questions as $question)
                                     <div class="question-group">
