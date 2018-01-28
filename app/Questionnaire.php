@@ -4,23 +4,46 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Questionnaire
+ * @package App
+ */
 class Questionnaire extends Model
 {
     /**
-     * Get a list of the question texts and the user's associated answers for today.
+     * Get a list of the questions and the associated question choices for all questionnaires.
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public static function questions()
+    public static function allQuestions()
     {
-        return static::join('questions', 'questions.questionnaire_id', '=', 'questionnaires.id')
-                     ->join('question_choices', 'question_choices.question_id', '=', 'questions.id')
+        return static::join('questions AS q', 'q.questionnaire_id', '=', 'questionnaires.id')
                      ->select(
                          'questionnaires.id AS questionnaire_id',
                          'questionnaires.name AS questionnaire_name',
-                         'questions.id AS question_id',
-                         'questions.label AS question'
+                         'q.id AS question_id',
+                         'q.label AS question'
                      )
+                     ->get();
+    }
+
+    /**
+     * Get a list of the questions and the associated question choices for the given questionnaire ID.
+     *
+     * @param int $questionnaireId
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public static function questions($questionnaireId)
+    {
+        return static::join('questions AS q', 'q.questionnaire_id', '=', 'questionnaires.id')
+                     ->select(
+                         'questionnaires.id AS questionnaire_id',
+                         'questionnaires.name AS questionnaire_name',
+                         'q.id AS question_id',
+                         'q.label AS question'
+                     )
+                     ->where('questionnaires.id', '=', $questionnaireId)
                      ->get();
     }
 }

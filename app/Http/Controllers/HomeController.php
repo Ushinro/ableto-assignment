@@ -24,7 +24,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the questionnaire.
+     * Show the questionnaires.
      *
      * TODO: Reduce the number of DB calls from 3 tables:
      *       questionnaires
