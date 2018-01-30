@@ -35,13 +35,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $userAnswersForToday = UserAnswer::today();
-        if (count($userAnswersForToday) > 0) {
-            // User already answered the survey for today.
-            // Redirect them to the answers review page
-            return redirect('answers');
-        }
-
         $questionnaires = Questionnaire::all();
         $questions = Question::all();
         $unsortedQuestionChoices = QuestionChoice::all();

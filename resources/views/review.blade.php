@@ -12,22 +12,29 @@
 
                     <div class="user-answer-section">
                         @if (count($userAnswers) > 0)
-                            <p>Your answers for today were:</p>
+                            <h3>Your answers for today were:</h3>
 
-                            {{-- The flow of the names is not coherent... --}}
-                            @foreach ($userAnswers as $question)
-                                <p>
-                                    <div>
-                                        <b>{{ $question[0]->question }}</b>
+                            <div class="questionnaires-container">
+                                {{-- The flow of the names is not coherent... --}}
+                                @foreach ($userAnswers as $submissionDate => $submission)
+                                    <div class="questionnaire-submission">
+                                        <h4>Submitted at: {{ $submissionDate }}</h4>
+                                        @foreach ($submission as $question)
+                                            <p>
+                                                <div>
+                                                    <b>{{ $question[0]->question }}</b>
+                                                </div>
+
+                                                @foreach ($question as $userAnswer)
+                                                    <div>
+                                                        {{ $userAnswer->answer }}
+                                                    </div>
+                                                @endforeach
+                                            </p>
+                                        @endforeach
                                     </div>
-
-                                    @foreach ($question as $userAnswer)
-                                        <div>
-                                            {{ $userAnswer->answer }}
-                                        </div>
-                                    @endforeach
-                                </p>
-                            @endforeach
+                                @endforeach
+                            </div>
                         @else
                             You have not answered the survey for today.
                         @endif

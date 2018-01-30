@@ -31,7 +31,7 @@ class QuestionnaireController extends Controller
         $unfilteredUserAnswers = UserAnswer::today();
         $userAnswers = [];
         foreach ($unfilteredUserAnswers as $userAnswer) {
-            $userAnswers[$userAnswer->question_id][] = $userAnswer;
+            $userAnswers[$userAnswer->created_at->format('F j, Y, g:i:s a')][$userAnswer->question_id][] = $userAnswer;
         }
 
         return view('review', compact('userAnswers'));

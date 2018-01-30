@@ -55,6 +55,10 @@ body {
     border-width: 0;
 }
 
+.questionnaires-container > .questionnaire-submission:not(:last-child) {
+    border-bottom: 2px solid #8e8d8d;
+}
+
 .question-group {
     margin: 16px 0;
 }

@@ -18,15 +18,17 @@ class UserAnswer extends Model
      */
     public static function today()
     {
-        return static::join('question_choices', 'question_choices.id', '=', 'user_answers.question_choice_id')
-                     ->join('questions', 'questions.id', '=', 'question_choices.question_id')
+        return static::join('question_choices AS qc', 'qc.id', '=', 'user_answers.question_choice_id')
+                     ->join('questions AS q', 'q.id', '=', 'qc.question_id')
                      ->select(
-                         'questions.id AS question_id',
-                         'questions.label AS question',
-                         'question_choices.label AS answer'
+                         'q.id AS question_id',
+                         'q.label AS question',
+                         'qc.label AS answer',
+                         'user_answers.created_at'
                      )
                      ->where('user_answers.user_id', '=', \Auth::user()->id)
                      ->whereDate('user_answers.created_at', '=', Carbon::today())
+                     ->orderBy('user_answers.created_at', 'DESC')
                      ->get();
     }
 }
