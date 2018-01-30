@@ -23,17 +23,23 @@ class QuestionnairesTableSeeder extends Seeder
 
         $question1 = factory(Question::class)->create([
             'questionnaire_id' => $questionnaire->id,
-            'label' => 'What type of car do you own?',
+            'label' => 'How are you feeling today?',
             'type' => 'radio',
         ]);
         $question2 = factory(Question::class)->create([
             'questionnaire_id' => $questionnaire->id,
-            'label' => 'How many world languages do you know?',
+            'label' => 'How many hours of sleep did you have last night?',
             'type' => 'radio',
         ]);
         $question3 = factory(Question::class)->create([
             'questionnaire_id' => $questionnaire->id,
             'label' => 'What genres of books do you enjoy reading?',
+            'type' => 'checkbox',
+            'required' => false,
+        ]);
+        $question4 = factory(Question::class)->create([
+            'questionnaire_id' => $questionnaire->id,
+            'label' => 'What will you do today?',
             'type' => 'checkbox',
             'required' => false,
         ]);
@@ -43,39 +49,54 @@ class QuestionnairesTableSeeder extends Seeder
         // since we will have the question ID to meet the question_id foreign key constraint.
         $question1Choice1 = factory(QuestionChoice::class)->create([
             'question_id' => $question1->id,
-            'label' => 'American',
-            'value' => 'american',
+            'label' => 'Terrible',
+            'value' => '-2',
         ]);
         $question1Choice2 = factory(QuestionChoice::class)->create([
             'question_id' => $question1->id,
-            'label' => 'European',
-            'value' => 'european',
+            'label' => 'Not so good',
+            'value' => '-1',
         ]);
         $question1Choice3 = factory(QuestionChoice::class)->create([
             'question_id' => $question1->id,
-            'label' => 'Japanese',
-            'value' => 'japanese',
+            'label' => 'Okay — not good, not bad',
+            'value' => '0',
         ]);
         $question1Choice4 = factory(QuestionChoice::class)->create([
             'question_id' => $question1->id,
-            'label' => 'I do not own a car',
-            'value' => 'none',
+            'label' => 'Pretty good',
+            'value' => '1',
+        ]);
+        $question1Choice5 = factory(QuestionChoice::class)->create([
+            'question_id' => $question1->id,
+            'label' => 'Excellent',
+            'value' => '2',
         ]);
 
         $question2Choice1 = factory(QuestionChoice::class)->create([
             'question_id' => $question2->id,
-            'label' => '1',
-            'value' => '1',
+            'label' => 'Less than 6',
+            'value' => '5',
         ]);
         $question2Choice2 = factory(QuestionChoice::class)->create([
             'question_id' => $question2->id,
-            'label' => '2',
-            'value' => '2',
+            'label' => '6',
+            'value' => '6',
         ]);
         $question2Choice3 = factory(QuestionChoice::class)->create([
             'question_id' => $question2->id,
-            'label' => 'Greater than 2',
-            'value' => '>2',
+            'label' => '7',
+            'value' => '7',
+        ]);
+        $question2Choice3 = factory(QuestionChoice::class)->create([
+            'question_id' => $question2->id,
+            'label' => '8',
+            'value' => '8',
+        ]);
+        $question2Choice3 = factory(QuestionChoice::class)->create([
+            'question_id' => $question2->id,
+            'label' => 'Greater than 8',
+            'value' => '9',
         ]);
 
         $question3Choice1 = factory(QuestionChoice::class)->create([
@@ -102,6 +123,32 @@ class QuestionnairesTableSeeder extends Seeder
             'question_id' => $question3->id,
             'label' => 'Romance',
             'value' => 'romance',
+        ]);
+
+        $question4Choice1 = factory(QuestionChoice::class)->create([
+            'question_id' => $question4->id,
+            'label' => 'Work',
+            'value' => 'work',
+        ]);
+        $question4Choice2 = factory(QuestionChoice::class)->create([
+            'question_id' => $question4->id,
+            'label' => 'Exercise',
+            'value' => 'exercise',
+        ]);
+        $question4Choice3 = factory(QuestionChoice::class)->create([
+            'question_id' => $question4->id,
+            'label' => 'Play games',
+            'value' => 'games',
+        ]);
+        $question4Choice4 = factory(QuestionChoice::class)->create([
+            'question_id' => $question4->id,
+            'label' => 'Learn something new',
+            'value' => 'learn',
+        ]);
+        $question4Choice5 = factory(QuestionChoice::class)->create([
+            'question_id' => $question4->id,
+            'label' => 'Hang out with other people',
+            'value' => 'socialize',
         ]);
     }
 }
