@@ -15,25 +15,22 @@
                             <h3>Your answers for today were:</h3>
 
                             <div class="questionnaires-container">
-                                {{-- The flow of the names is not coherent... --}}
-                                @foreach ($userAnswers as $submissionDate => $submission)
-                                    <div class="questionnaire-submission">
-                                        <h4>Submitted at: {{ $submissionDate }}</h4>
-                                        @foreach ($submission as $question)
-                                            <p>
-                                                <div>
-                                                    <b>{{ $question[0]->question }}</b>
-                                                </div>
+                                <div class="questionnaire-submission">
+                                    {{-- The flow of the names is not coherent... --}}
+                                    @foreach ($userAnswers as $question)
+                                        <p>
+                                            <div>
+                                                <b>{{ $question[0]->question }}</b>
+                                            </div>
 
-                                                @foreach ($question as $userAnswer)
-                                                    <div>
-                                                        {{ $userAnswer->answer }}
-                                                    </div>
-                                                @endforeach
-                                            </p>
-                                        @endforeach
-                                    </div>
-                                @endforeach
+                                            @foreach ($question as $userAnswer)
+                                                <div>
+                                                    {{ $userAnswer->answer }}
+                                                </div>
+                                            @endforeach
+                                        </p>
+                                    @endforeach
+                                </div>
                             </div>
                         @else
                             You have not answered the survey for today.

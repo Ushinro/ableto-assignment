@@ -15,14 +15,17 @@ class Questionnaire extends Model
      *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public static function allQuestions()
+    public static function allQuestionsAndChoices()
     {
         return static::join('questions AS q', 'q.questionnaire_id', '=', 'questionnaires.id')
+                     ->join('question_choices AS qc', 'qc.question_id', '=', 'q.id')
                      ->select(
                          'questionnaires.id AS questionnaire_id',
                          'questionnaires.name AS questionnaire_name',
                          'q.id AS question_id',
-                         'q.label AS question'
+                         'q.label AS question',
+                         'qc.id AS choice_value',
+                         'qc.label AS choice_label'
                      )
                      ->get();
     }

@@ -20,7 +20,8 @@
                                 @foreach ($questions as $question)
                                     <div class="question-group">
                                         @php
-                                            $questionOptionList = $questionChoices[$questionnaire->id][$question->id];
+                                            $questionChoicesList = $questionChoices[$questionnaire->id][$question->id];
+                                            $userAnswersList = array_key_exists($question->id, $userAnswers) ? $userAnswers[$question->id] : [];
                                         @endphp
 
                                         {{ $loop->index + 1 }}. <label for="q{{ $question->id }}" class="question-label">{{ $question->label }}</label>
@@ -34,17 +35,18 @@
                                                 @endforeach
                                             </select>
                                         @else
-                                            @foreach ($questionOptionList as $questionOption)
+                                            @foreach ($questionChoicesList as $questionChoice)
                                                 <div class="question-option-group">
                                                     <input type="{{ $question->type }}"
-                                                           id="q{{ $question->id }}-c{{ $questionOption->id }}"
+                                                           id="q{{ $question->id }}-c{{ $questionChoice->id }}"
                                                            class="input-{{ $question->type }}"
                                                            name="q{{ $question->id }}{{ $question->type == 'checkbox' ? '[]' : '' }}"
-                                                           value="{{ $questionOption->id }}"
+                                                           value="{{ $questionChoice->id }}"
+                                                           {{ in_array($questionChoice->id, $userAnswersList) ? 'checked="checked"' : '' }}
                                                            {{ $question->required && $question->type != 'checkbox' ? 'required="required"' : '' }}>
-    
-                                                    <label for="q{{ $question->id }}-c{{ $questionOption->id }}" class="question-choice-label">
-                                                        {{ $questionOption->label }}
+
+                                                    <label for="q{{ $question->id }}-c{{ $questionChoice->id }}" class="question-choice-label">
+                                                        {{ $questionChoice->label }}
                                                     </label>
                                                 </div>
                                             @endforeach
@@ -55,7 +57,7 @@
                                 <input type="hidden" name="questionnaire" value="{{ $questionnaire->id }}">
 
                                 <button type="submit" class="btn btn-primary">
-                                    Submit
+                                    {{  count($userAnswers) == 0 ? 'Submit' : 'Update' }}
                                 </button>
                             </form>
                         @endforeach

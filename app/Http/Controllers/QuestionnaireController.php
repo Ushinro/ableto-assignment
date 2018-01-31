@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Question;
 use App\Questionnaire;
 use App\UserAnswer;
+use Carbon\Carbon;
 
 /**
  * Class QuestionnaireController
@@ -31,7 +32,7 @@ class QuestionnaireController extends Controller
         $unfilteredUserAnswers = UserAnswer::today();
         $userAnswers = [];
         foreach ($unfilteredUserAnswers as $userAnswer) {
-            $userAnswers[$userAnswer->created_at->format('F j, Y, g:i:s a')][$userAnswer->question_id][] = $userAnswer;
+            $userAnswers[$userAnswer->question_id][] = $userAnswer;
         }
 
         return view('review', compact('userAnswers'));
@@ -56,6 +57,23 @@ class QuestionnaireController extends Controller
         }
         $this->validate(request(), $requiredQuestionsToValidate);
 
+        $todaysAnswers = UserAnswer::today();
+        $today = Carbon::today();
+        if (count($todaysAnswers) > 0) {
+            $today = $todaysAnswers[0]->created_at;
+        }
+
+        // HACK: Purge the records to "update" the existing submission.
+        // This hack is here because the database relationships between tables was not well-thought-out
+        // and it has become difficult to fetch existing submissions.
+        foreach ($todaysAnswers as $answer) {
+            try {
+                $answer->destroy($answer->user_answer_id);
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
         foreach ($questions as $question) {
             $formAnswer = request('q' . $question->id);
 
@@ -65,12 +83,14 @@ class QuestionnaireController extends Controller
                         $userAnswer = new UserAnswer();
                         $userAnswer->user_id = \Auth::user()->id;
                         $userAnswer->question_choice_id = $answer;
+                        $userAnswer->created_at = $today;
                         $userAnswer->save();
                     }
                 } else {
                     $userAnswer = new UserAnswer();
                     $userAnswer->user_id = \Auth::user()->id;
                     $userAnswer->question_choice_id = $formAnswer;
+                    $userAnswer->created_at = $today;
                     $userAnswer->save();
                 }
             }

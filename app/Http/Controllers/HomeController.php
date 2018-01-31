@@ -39,19 +39,28 @@ class HomeController extends Controller
         $questions = Question::all();
         $unsortedQuestionChoices = QuestionChoice::all();
 
+        // This feels very dirty and hacky to organize data.
+        $userAnswersToday = UserAnswer::today();
+        $userAnswers = [];
+        foreach ($userAnswersToday as $userAnswer) {
+            $userAnswers[$userAnswer->question_id][] = $userAnswer->input_value;
+        }
+
         $questionChoices = [];
         foreach ($questionnaires as $questionnaire) {
             foreach ($unsortedQuestionChoices as $questionChoice) {
                 $questionChoices[$questionnaire->id][$questionChoice->question_id][] = $questionChoice;
             }
         }
+//        dd($questionChoices);
 
         return view(
             'home',
             compact(
                 'questionnaires',
                 'questions',
-                'questionChoices'
+                'questionChoices',
+                'userAnswers'
             )
         );
     }

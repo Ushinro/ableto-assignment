@@ -23,7 +23,9 @@ class UserAnswer extends Model
                      ->select(
                          'q.id AS question_id',
                          'q.label AS question',
+                         'qc.id AS input_value',
                          'qc.label AS answer',
+                         'user_answers.id AS user_answer_id',
                          'user_answers.created_at'
                      )
                      ->where('user_answers.user_id', '=', \Auth::user()->id)
