@@ -44,7 +44,7 @@ class WebRouteTest extends TestCase
         $this->assertAuthenticatedAs($user);
 
         $response = $this->get('/');
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
 
     /**
@@ -77,6 +77,5 @@ class WebRouteTest extends TestCase
         $response = $this->post('/answers', $data);
 
         $response->assertStatus(302);
-        $response->assertRedirect('/answers');
     }
 }
